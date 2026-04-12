@@ -382,10 +382,10 @@ export default function DashboardPage() {
           </div>
         </div>
         <button
-          onClick={() => { localStorage.removeItem("atmo_token"); router.push("/"); }}
+          onClick={() => { localStorage.removeItem("atmo_token"); router.replace("/"); }}
           className="text-sm text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
         >
-          Déconnexion
+          Actualiser token
         </button>
       </header>
 
