@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "portfolio.boringsystems.app",
   description: "Personal tools and experiments by Ahmed Omrane",
+  icons: { icon: "/flywheel-logo.svg" },
 };
 
 export default function RootLayout({
