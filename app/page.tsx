@@ -15,7 +15,7 @@ export default function HubPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white border-b border-gray-200 px-6 py-5">
         <p className="text-xs text-gray-400 font-mono tracking-widest uppercase mb-1">
-          apps.boringsystems.app
+          Portfolio of Personal Apps — Created with AI Agents
         </p>
         <h1 className="text-lg font-bold text-gray-800">Personal Apps</h1>
       </header>
