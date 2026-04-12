@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# personal-apps
 
-## Getting Started
+A collection of personal tools deployed at [apps.boringsystems.app](https://apps.boringsystems.app).
 
-First, run the development server:
+These apps are not linked publicly from the main site. If you have the link, you can use them.
+
+## Stack
+
+- [Next.js 16](https://nextjs.org) (App Router) — single repo, multiple apps as routes
+- [Tailwind CSS 4](https://tailwindcss.com)
+- Deployed on [Vercel](https://vercel.com) under the `apps.boringsystems.app` subdomain
+
+## Apps
+
+| App | Route | Description |
+|-----|-------|-------------|
+| [Pollen Tracker](./apps/pollen-tracker/README.md) | `/pollen-tracker` | Daily grass pollen forecast for Paris (Atmo France + RNSA + CAMS) |
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` at the repo root:
 
-## Learn More
+```
+ATMO_USERNAME=your_atmo_france_username
+ATMO_PASSWORD=your_atmo_france_password
+```
 
-To learn more about Next.js, take a look at the following resources:
+Required by the Pollen Tracker to authenticate against the Atmo France API server-side. Register at [admindata.atmo-france.org](https://admindata.atmo-france.org).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Adding a new app
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Create `app/<app-name>/page.tsx` (and any sub-routes you need)
+2. Add API routes under `app/api/<app-name>/`
+3. Register the app in `app/page.tsx` (the hub `APPS` array)
+4. Add `apps/<app-name>/README.md` with its own documentation
 
-## Deploy on Vercel
+## Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+personal-apps/
+├── app/
+│   ├── page.tsx                    # Hub landing page
+│   ├── layout.tsx                  # Root layout
+│   ├── globals.css
+│   ├── pollen-tracker/             # Pollen Tracker app
+│   │   ├── page.tsx
+│   │   └── dashboard/page.tsx
+│   └── api/
+│       └── pollen-tracker/         # Pollen Tracker API routes
+│           ├── auth/token/
+│           ├── auth/login/
+│           ├── pollen/
+│           └── history/grass/
+├── apps/
+│   └── pollen-tracker/
+│       └── README.md               # App-specific documentation
+└── public/
+    └── data/
+        └── rnsa-paris-grass.json   # Pre-processed historical pollen data
+```
