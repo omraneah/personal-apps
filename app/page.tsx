@@ -1,60 +1,54 @@
-"use client";
+import Link from "next/link";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+const APPS = [
+  {
+    slug: "pollen-tracker",
+    title: "Pollen Tracker",
+    description: "Daily grass pollen forecast for Paris — live Atmo France data with RNSA and CAMS historical chart.",
+    icon: "🌿",
+    href: "/pollen-tracker",
+  },
+] as const;
 
-export default function HomePage() {
-  const router = useRouter();
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    async function bootstrap() {
-      // Use cached token if still present in localStorage
-      const existing = localStorage.getItem("atmo_token");
-      if (existing) {
-        router.replace("/dashboard");
-        return;
-      }
-
-      // Fetch a fresh token from the server (credentials never touch the client)
-      try {
-        const res = await fetch("/api/auth/token");
-        const data = await res.json();
-        if (!res.ok || !data.token) {
-          setError(data.error || "Impossible de récupérer le token");
-          return;
-        }
-        localStorage.setItem("atmo_token", data.token);
-        router.replace("/dashboard");
-      } catch {
-        setError("Erreur de connexion au serveur");
-      }
-    }
-
-    bootstrap();
-  }, [router]);
-
+export default function HubPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100">
-      <div className="flex flex-col items-center gap-4">
-        {error ? (
-          <>
-            <div className="text-4xl">⚠️</div>
-            <p className="text-red-600 text-sm font-medium">{error}</p>
-            <button
-              onClick={() => { setError(""); window.location.reload(); }}
-              className="text-xs text-emerald-600 underline cursor-pointer"
-            >
-              Réessayer
-            </button>
-          </>
-        ) : (
-          <>
-            <div className="animate-spin h-7 w-7 rounded-full border-2 border-emerald-200 border-t-emerald-500" />
-            <p className="text-sm text-gray-400">Connexion…</p>
-          </>
-        )}
-      </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <header className="bg-white border-b border-gray-200 px-6 py-5">
+        <p className="text-xs text-gray-400 font-mono tracking-widest uppercase mb-1">
+          apps.boringsystems.app
+        </p>
+        <h1 className="text-lg font-bold text-gray-800">Personal Apps</h1>
+      </header>
+
+      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10">
+        <ul className="flex flex-col gap-3">
+          {APPS.map((app) => (
+            <li key={app.slug}>
+              <Link
+                href={app.href}
+                className="flex items-start gap-4 bg-white border border-gray-200 rounded-xl px-5 py-4 shadow-sm hover:border-gray-300 hover:shadow transition-all group"
+              >
+                <span className="text-2xl mt-0.5">{app.icon}</span>
+                <div>
+                  <p className="font-semibold text-gray-800 group-hover:text-emerald-600 transition-colors">
+                    {app.title}
+                  </p>
+                  <p className="text-sm text-gray-400 mt-0.5">{app.description}</p>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </main>
+
+      <footer className="px-6 py-4 text-center text-xs text-gray-300 border-t border-gray-100">
+        <a
+          href="https://boringsystems.app"
+          className="hover:text-gray-500 transition-colors"
+        >
+          boringsystems.app
+        </a>
+      </footer>
     </div>
   );
 }

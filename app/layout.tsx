@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pollen Index — Atmo France",
-  description: "Suivi des indices polliniques Graminées",
+  title: "apps.boringsystems.app",
+  description: "Personal tools and experiments by Ahmed Omrane",
 };
 
 export default function RootLayout({

@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 
 const ATMO_BASE = "https://admindata.atmo-france.org";
-const USERNAME = "ahmedomrane";
-const PASSWORD = "QgQ5f@v@jFN5x!H";
 
 // Server-side token cache — shared across requests for the lifetime of the process
 let cachedToken: string | null = null;
 let expiresAt: number = 0; // unix ms
 
 async function fetchFreshToken(): Promise<string> {
+  const username = process.env.ATMO_USERNAME;
+  const password = process.env.ATMO_PASSWORD;
+
+  if (!username || !password) {
+    throw new Error("ATMO_USERNAME and ATMO_PASSWORD environment variables are required");
+  }
+
   const res = await fetch(`${ATMO_BASE}/api/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: USERNAME, password: PASSWORD }),
+    body: JSON.stringify({ username, password }),
   });
 
   if (!res.ok) {
