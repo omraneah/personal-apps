@@ -20,6 +20,16 @@ const POLLEN_TYPES = [
 ] as const;
 type PollenKey = (typeof POLLEN_TYPES)[number]["key"];
 
+// ─── Concentration thresholds per species (gr/m³) — source: Atmo France / EAACI ─
+const THRESHOLDS: Record<PollenKey, [string, string][]> = {
+  gram: [["0–3","Très faible"],["3–30","Faible"],["30–50","Modéré"],["50–250","Élevé"],["250–500","Très élevé"],["> 500","Extrêmement élevé"]],
+  ambr: [["0–3","Très faible"],["3–30","Faible"],["30–50","Modéré"],["50–250","Élevé"],["250–500","Très élevé"],["> 500","Extrêmement élevé"]],
+  arm:  [["0–3","Très faible"],["3–30","Faible"],["30–50","Modéré"],["50–250","Élevé"],["350–500","Très élevé"],["> 500","Extrêmement élevé"]],
+  aul:  [["0–10","Très faible"],["10–60","Faible"],["60–100","Modéré"],["100–500","Élevé"],["500–1000","Très élevé"],["> 1000","Extrêmement élevé"]],
+  boul: [["0–10","Très faible"],["10–60","Faible"],["60–100","Modéré"],["100–500","Élevé"],["500–1000","Très élevé"],["> 1000","Extrêmement élevé"]],
+  oliv: [["0–20","Très faible"],["20–100","Faible"],["100–200","Modéré"],["200–500","Élevé"],["500–1000","Très élevé"],["> 1000","Extrêmement élevé"]],
+};
+
 // ─── Risk levels ──────────────────────────────────────────────────────────────
 const RISK: Record<number, { label: string; dot: string; row: string; text: string }> = {
   0: { label: "N/D",               dot: "bg-gray-300",   row: "",              text: "text-gray-400"   },
@@ -61,6 +71,39 @@ function RiskDot({ code }: { code: number }) {
     <span className="inline-flex items-center gap-1.5">
       <span className={`inline-block w-2.5 h-2.5 rounded-full ${r.dot}`} />
       <span className={`text-xs font-medium ${r.text}`}>{r.label}</span>
+    </span>
+  );
+}
+
+function ConcHeader({ pollenKey }: { pollenKey: PollenKey }) {
+  const [open, setOpen] = useState(false);
+  const thresholds = THRESHOLDS[pollenKey];
+  const dotClasses = [
+    "bg-green-400", "bg-lime-400", "bg-yellow-400",
+    "bg-orange-400", "bg-red-500", "bg-purple-600",
+  ];
+  return (
+    <span className="inline-flex items-center gap-1 relative">
+      Conc. (gr/m³)
+      <span
+        className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-gray-200 text-gray-500 text-[9px] font-bold cursor-default leading-none"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        ?
+      </span>
+      {open && (
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 bg-white border border-gray-200 rounded-lg shadow-lg py-1.5 min-w-[180px]">
+          <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-white border-l border-t border-gray-200 rotate-45" />
+          {thresholds.map(([range, label], i) => (
+            <div key={i} className="flex items-center gap-2 px-3 py-1">
+              <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${dotClasses[i]}`} />
+              <span className="text-xs text-gray-500 tabular-nums w-20">{range}</span>
+              <span className="text-xs text-gray-700 font-medium">{label}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </span>
   );
 }
@@ -391,7 +434,7 @@ function ForecastTable({ pollenKey, onPollenChange }: {
               <tr className="text-xs text-gray-400 uppercase tracking-wide border-b border-gray-100">
                 <th className="text-left px-5 py-2.5 font-medium">Date</th>
                 <th className="text-center px-4 py-2.5 font-medium">Indice</th>
-                <th className="text-center px-4 py-2.5 font-medium">Conc. (gr/m³)</th>
+                <th className="text-center px-4 py-2.5 font-medium"><ConcHeader pollenKey={pollenKey} /></th>
                 <th className="text-left px-5 py-2.5 font-medium">Risque</th>
               </tr>
             </thead>
