@@ -8,6 +8,13 @@ const APPS = [
     icon: "🌿",
     href: "/pollen-tracker",
   },
+  {
+    slug: "african-legal-factory",
+    title: "African Legal Factory",
+    description: "Rebuild of africanlegalfactory.com — bilingual (FR/EN) legaltech site for the African startup ecosystem.",
+    icon: "⚖️",
+    href: "/african-legal-factory",
+  },
 ] as const;
 
 export default function HubPage() {
