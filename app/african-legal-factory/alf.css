@@ -1,0 +1,112 @@
+.alf-root {
+  --alf-bg:           #faf9f7;
+  --alf-bg-elevated:  #f0ede8;
+  --alf-border:       #d4cfc9;
+  --alf-text:         #1a1917;
+  --alf-text-muted:   #706e6a;
+  --alf-accent:       #8b6914;
+  --alf-accent-dim:   #b09050;
+
+  --alf-max-content: 680px;
+  --alf-max-wide:    1100px;
+
+  background: var(--alf-bg);
+  color: var(--alf-text);
+  font-family: var(--font-alf-body, Georgia, serif);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.alf-root h1,
+.alf-root h2,
+.alf-root h3,
+.alf-root h4,
+.alf-root h5,
+.alf-root h6 {
+  font-family: var(--font-alf-display, Georgia, serif);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--alf-text);
+}
+
+.alf-root a {
+  color: var(--alf-accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.alf-root a:hover {
+  color: var(--alf-text);
+}
+
+.alf-root strong { font-weight: 500; }
+
+.alf-root .alf-label {
+  font-family: var(--font-alf-ui, system-ui, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--alf-text-muted);
+}
+
+.alf-root .alf-muted { color: var(--alf-text-muted); }
+.alf-root .alf-accent { color: var(--alf-accent); }
+
+.alf-root .alf-container {
+  max-width: var(--alf-max-wide);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.alf-root .alf-prose {
+  max-width: var(--alf-max-content);
+  margin-inline: auto;
+}
+
+.alf-root .alf-hairline {
+  border: none;
+  border-top: 1px solid var(--alf-border);
+  margin-block: 3rem;
+}
+
+.alf-root .alf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-alf-body, Georgia, serif);
+  font-size: 1rem;
+  color: var(--alf-accent);
+  border-bottom: 1px solid var(--alf-accent-dim);
+  padding-block: 0.25rem;
+}
+
+.alf-root .alf-btn:hover {
+  color: var(--alf-text);
+  border-bottom-color: var(--alf-text);
+}
+
+.alf-root .alf-card {
+  background: var(--alf-bg-elevated);
+  border: 1px solid var(--alf-border);
+  padding: 1.5rem;
+}
+
+.alf-root details > summary {
+  cursor: pointer;
+  list-style: none;
+  padding-block: 1.25rem;
+  font-family: var(--font-alf-display, Georgia, serif);
+  font-size: 1.125rem;
+}
+.alf-root details > summary::-webkit-details-marker { display: none; }
+.alf-root details[open] > summary { color: var(--alf-accent); }
+
+.alf-root code {
+  font-family: var(--font-alf-mono, ui-monospace, monospace);
+  font-size: 0.875rem;
+  background: var(--alf-bg-elevated);
+  padding: 0.1em 0.4em;
+}
