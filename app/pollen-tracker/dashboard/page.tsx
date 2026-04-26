@@ -178,7 +178,10 @@ function GrassHistoryChart() {
   const [data, setData] = useState<HistoryData>({ cams: [], rnsa: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [yearFilter, setYearFilter] = useState<YearFilter>("2025");
+  const todayIso = new Date().toISOString().split("T")[0];
+  const [yearFilter, setYearFilter] = useState<YearFilter>(
+    todayIso.slice(0, 4) as YearFilter,
+  );
 
   useEffect(() => {
     fetch("/api/pollen-tracker/history/grass")
@@ -204,6 +207,14 @@ function GrassHistoryChart() {
     (best, p) => ((p[peakSource] ?? 0) > (best?.[peakSource] ?? 0) ? p : best), null
   );
   const peakValue = peakPoint?.[peakSource] ?? 0;
+
+  // Index of today's point in the visible data (or the latest day on/before today).
+  let todayIndex = chartData.findIndex((p) => p.date === todayIso);
+  if (todayIndex < 0) {
+    for (let i = chartData.length - 1; i >= 0; i--) {
+      if (chartData[i].date <= todayIso) { todayIndex = i; break; }
+    }
+  }
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -281,7 +292,11 @@ function GrassHistoryChart() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
                 <XAxis dataKey="date" ticks={ticks} tickFormatter={tickFmt} tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} unit=" gr" />
-                <Tooltip content={<HistoryTooltip />} />
+                <Tooltip
+                  content={<HistoryTooltip />}
+                  defaultIndex={todayIndex >= 0 ? todayIndex : undefined}
+                  cursor={{ stroke: "#9ca3af", strokeDasharray: "3 3" }}
+                />
                 <ReferenceLine y={10} stroke="#facc15" strokeDasharray="4 3" label={{ value: "Moyen", position: "insideTopRight", fontSize: 9, fill: "#ca8a04" }} />
                 <ReferenceLine y={50} stroke="#f97316" strokeDasharray="4 3" label={{ value: "Élevé",  position: "insideTopRight", fontSize: 9, fill: "#c2410c" }} />
                 <Area type="monotone" dataKey="rnsa" name="rnsa" stroke="#10b981" strokeWidth={1.5} fill="url(#rnsaGrad)" dot={false} activeDot={{ r: 3, fill: "#10b981" }} connectNulls={false} />
@@ -351,13 +366,24 @@ function ForecastTable({ pollenKey, onPollenChange }: {
       );
       features.sort((a, b) => a.date_ech.localeCompare(b.date_ech));
       const today = new Date().toISOString().split("T")[0];
+      const todayMs = new Date(today + "T00:00:00").getTime();
+      const RELATIVE_LABELS: Record<number, string> = {
+        [-2]: "Avant-hier",
+        [-1]: "Hier",
+        0: "Aujourd'hui",
+        1: "Demain",
+        2: "Après-demain",
+      };
       setRows(
         features.map((props) => {
           const iso = props.date_ech.split("T")[0];
           const exactDate = new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", {
             day: "numeric", month: "long", year: "numeric",
           });
-          const dayName = iso < today ? "Hier" : iso === today ? "Aujourd'hui" : "Demain";
+          const dayDiff = Math.round(
+            (new Date(iso + "T00:00:00").getTime() - todayMs) / 86_400_000
+          );
+          const dayName = RELATIVE_LABELS[dayDiff] ?? exactDate;
           return { date: iso, label: `${dayName} (${exactDate})`, props };
         })
       );
