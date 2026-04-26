@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Authorization token required" }, { status: 401 });
   }
 
-  // Single call — returns all available days (yesterday/today/tomorrow) at once
+  // Single call — returns all available days (J / J+1 / J+2) at once
   const params = new URLSearchParams({
     format: "geojson",
     with_geom: "false",
