@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Shorts Blocker",
+  "version": "1.0.0",
+  "description": "Hides YouTube Shorts everywhere and redirects /shorts/ links to the regular player.",
+  "permissions": ["declarativeNetRequest"],
+  "host_permissions": ["*://*.youtube.com/*"],
+  "declarative_net_request": {
+    "rule_resources": [
+      { "id": "shorts_redirect", "enabled": true, "path": "rules.json" }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "css": ["hide.css"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ These apps are not linked publicly from the main site. If you have the link, you
 | App | Route | Description |
 |-----|-------|-------------|
 | [Pollen Tracker](./apps/pollen-tracker/README.md) | `/pollen-tracker` | Daily grass pollen forecast for Paris (Atmo France + RNSA + CAMS) |
+| [Shorts Blocker](./apps/shorts-blocker/README.md) | — (Chrome extension, load unpacked) | Hides YouTube Shorts and redirects `/shorts/` links to the regular player |
 
 ## Development
 
