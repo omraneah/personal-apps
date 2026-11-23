@@ -1,0 +1,23 @@
+/* Sidebar entry — full guide and collapsed mini guide */
+ytd-guide-entry-renderer:has(a[title="Shorts"]),
+ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
+
+/* Shorts shelves — home, subscriptions, search, watch-page sidebar */
+ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
+ytd-rich-shelf-renderer[is-shorts],
+ytd-reel-shelf-renderer,
+grid-shelf-view-model:has(a[href^="/shorts/"]),
+ytd-rich-section-renderer:has(a[href^="/shorts/"]),
+
+/* Individual Short tiles mixed into feeds and results */
+ytd-rich-item-renderer:has(a[href^="/shorts/"]),
+ytd-video-renderer:has(a[href^="/shorts/"]),
+ytd-grid-video-renderer:has(a[href^="/shorts/"]),
+ytd-compact-video-renderer:has(a[href^="/shorts/"]),
+ytm-shorts-lockup-view-model,
+ytm-shorts-lockup-view-model-v2,
+
+/* Shorts tab on channel pages */
+yt-tab-shape[tab-title="Shorts"] {
+  display: none !important;
+}
